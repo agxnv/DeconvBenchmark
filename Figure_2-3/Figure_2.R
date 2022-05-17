@@ -475,5 +475,5 @@ Sup_Table3 <- rbind(K_final,L_final,MG_final,M_final,SI_final,S_final) %>%
             mean = mean(difs),
             sd = sd(difs),
             range = max(difs) - min(difs),
-            correlation = cor(betahat,betasim)) %>% 
+            correlation = cor(betasim,betahat)) %>% 
   ungroup()
