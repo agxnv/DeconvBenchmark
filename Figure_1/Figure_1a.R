@@ -75,7 +75,7 @@ S_corplot <- ggplot(data = S_melted, aes(x=Var1, y=Var2, fill=value)) +
   geom_tile() + scale_y_discrete(position = "right", label=abbreviate) + ggtitle("Spleen") +
   xlab(NULL) + ylab(NULL) + theme(plot.title = element_text(hjust = 0.5)) + guides(fill=guide_legend(title="Correlation\nCoefficient", reverse=T)) + scale_x_discrete(label=abbreviate) + scale_fill_continuous(high = "red", low = "light blue")
 
-############Table
+############Sup_Table1
 
 K_cormat[lower.tri(K_cormat, diag = TRUE)] <- NA
 K_melted_table <- melt(K_cormat, na.rm = TRUE)
@@ -118,4 +118,3 @@ Sup_Table1 <- cortotal %>%
             sd = sd(value)) %>% 
   ungroup()
 
-write.xlsx(table, "Sup_table1.xlsx")
