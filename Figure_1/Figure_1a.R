@@ -2,6 +2,7 @@ library(openxlsx)
 library(reshape2)
 library(ggplot2)
 library(RColorBrewer)
+library(ggpubr)
 
 K_sig <- read.csv("Figure_1/Data/MS/K.csv", row.names = 1)
 K_sig <- K_sig[,order(colnames(K_sig))]
@@ -75,6 +76,9 @@ S_corplot <- ggplot(data = S_melted, aes(x=Var1, y=Var2, fill=value)) +
   geom_tile() + scale_y_discrete(position = "right", label=abbreviate) + ggtitle("Spleen") +
   xlab(NULL) + ylab(NULL) + theme(plot.title = element_text(hjust = 0.5)) + guides(fill=guide_legend(title="Correlation\nCoefficient", reverse=T)) + scale_x_discrete(label=abbreviate) + scale_fill_continuous(high = "red", low = "light blue")
 
+ggarrange(K_corplot, L_corplot, MG_corplot, M_corplot, SI_corplot, S_corplot,
+          ncol = 3, nrow = 3)
+
 ############Sup_Table1
 
 K_cormat[lower.tri(K_cormat, diag = TRUE)] <- NA
@@ -102,7 +106,7 @@ M_melted_table$signature <- "Muscle"
 SI_melted_table$signature <- "Small intestine"
 S_melted_table$signature <- "Spleen"
 
-cortotal <- rbind(K_melted_table,L_melted_table,MG_melted_table,M_melted_table,PB_melted_table,SI_melted_table,S_melted_table) 
+cortotal <- rbind(K_melted_table,L_melted_table,MG_melted_table,M_melted_table,SI_melted_table,S_melted_table) 
 
 #define quantiles of interest
 q = c(.25, .5, .75)
