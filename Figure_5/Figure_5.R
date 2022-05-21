@@ -53,7 +53,7 @@ names(k_quanTIseq_inm_sum) <- gsub("[.]"," ", names(k_quanTIseq_inm_sum))
 
 k_inm_est <- rbind(k_CIBERSORT_inm_sum,k_EPIC_inm_sum,k_MIXTURE_inm_sum,k_quanTIseq_inm_sum)
 
-l_sig <- read.csv("Figure_5/Data/L.csv", row.names = 1, check.names=FALSE)
+l_sig <- read.csv("Figure_5/Data/MS/L.csv", row.names = 1, check.names=FALSE)
 
 l_CIBERSORT_inm_sum_1 <- read_csv("Figure_5/Data/CIBERSORT_estimations/l_CIBERSORT_inm_sum_prop_1.csv")
 l_CIBERSORT_inm_sum_1 <- as.data.frame(l_CIBERSORT_inm_sum_1)
