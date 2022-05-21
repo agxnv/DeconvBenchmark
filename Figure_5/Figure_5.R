@@ -429,7 +429,7 @@ Figure_5a <-  ggplot(inm_est_TP, aes(factor(Method), value)) +
   geom_jitter(width = 0.2, alpha = 0.5, height = 0) +
   geom_text(data = n, aes(y = 1.05, label = n)) +
   labs(x = "Methods",
-       y = "Predicted percentages for TP") 
+       y = "Predicted percentages for TP") + scale_y_continuous(labels = scales::percent)
 
 Sup_Figure_3 <- ggplot(inm_est_TP, aes(factor(Signature), value)) +
   geom_boxplot(fill = "grey80", colour = "#3366FF") +
