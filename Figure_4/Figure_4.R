@@ -282,8 +282,6 @@ s_null_est <- rbind(s_CIBERSORT_par_sum,s_EPIC_par_sum,s_MIXTURE_par_sum,s_quanT
 null_est <-rbind(k_null_est,l_null_est,mg_null_est,m_null_est,si_null_est,s_null_est)
 rownames(null_est) <- NULL
 
-rm(list=setdiff(ls(), "null_est"))
-
 #Figure
 
 library(reshape2)
