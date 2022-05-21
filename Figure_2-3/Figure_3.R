@@ -2,6 +2,8 @@ library(tidyverse)
 library(immunedeconv)
 library(MIXTURE)
 library(ggplot2)
+library(readr)
+library(reshape2)
 
 load('Figure_2-3/Data/MixSims_BetaSims.RData')
 
@@ -467,7 +469,7 @@ S_final <- left_join(S_final,
                      by = "ID")
 S_final$ID <- NULL
 
-counts_FINAL <- rbind(K_final, MG_final, M_final, SI_final, S_final)
+counts_FINAL <- rbind(K_final, L_final, MG_final, M_final, SI_final, S_final)
 
 #Figure
 

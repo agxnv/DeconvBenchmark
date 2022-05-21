@@ -286,10 +286,10 @@ S_MIXTURE <- S_MIXTURE %>% arrange(X1)
 
 
 rownames(S_sig) <- toupper(rownames(S_sig))
-write.table(data.frame("X1"=rownames(S_sig),S_sig), file = "Figure_1/Data/S_sig_signature.txt", sep = c("\t"), row.names = FALSE, quote = FALSE)
+write.table(data.frame("X1"=rownames(S_sig),S_sig), file = "Figure_1/Data/MS/S_sig_signature.txt", sep = c("\t"), row.names = FALSE, quote = FALSE)
 S_quanTIseq <-deconvolute_quantiseq.default(mix.mat = S_sig, 
                                             arrays = FALSE, 
-                                            signame = "Figure_1/Data/S_sig", 
+                                            signame = "Figure_1/Data/MS/S_sig", 
                                             tumor = FALSE, 
                                             mRNAscale = FALSE, method = "lsei", btotalcells = FALSE,
                                             rmgenes = "unassigned")[, -c(10)]
