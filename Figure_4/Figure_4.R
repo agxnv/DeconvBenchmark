@@ -28,7 +28,6 @@ k_MIXTURE_par_sum <- MIXTURE(expressionMatrix = k_counts_par_sum,
                              verbose = TRUE,
                              nullDist = "PopulationBased") 
 k_MIXTURE_par_sum <- as.data.frame(k_MIXTURE_par_sum$Subjects$MIXabs)
-k_MIXTURE_par_sum <- as.data.frame(t(k_MIXTURE_par_sum))
 k_MIXTURE_par_sum$Signature <- "Kidney"
 k_MIXTURE_par_sum$Method <- "MIXTURE"
 
@@ -74,7 +73,6 @@ l_MIXTURE_par_sum <- MIXTURE(expressionMatrix = l_counts_par_sum,
                              verbose = TRUE,
                              nullDist = "PopulationBased") 
 l_MIXTURE_par_sum <- as.data.frame(l_MIXTURE_par_sum$Subjects$MIXabs)
-l_MIXTURE_par_sum <- as.data.frame(t(l_MIXTURE_par_sum))
 l_MIXTURE_par_sum$Signature <- "Liver"
 l_MIXTURE_par_sum$Method <- "MIXTURE"
 
@@ -120,7 +118,6 @@ mg_MIXTURE_par_sum <- MIXTURE(expressionMatrix = mg_counts_par_sum,
                              verbose = TRUE,
                              nullDist = "PopulationBased") 
 mg_MIXTURE_par_sum <- as.data.frame(mg_MIXTURE_par_sum$Subjects$MIXabs)
-mg_MIXTURE_par_sum <- as.data.frame(t(mg_MIXTURE_par_sum))
 mg_MIXTURE_par_sum$Signature <- "Mammary gland"
 mg_MIXTURE_par_sum$Method <- "MIXTURE"
 
@@ -166,7 +163,6 @@ m_MIXTURE_par_sum <- MIXTURE(expressionMatrix = m_counts_par_sum,
                              verbose = TRUE,
                              nullDist = "PopulationBased") 
 m_MIXTURE_par_sum <- as.data.frame(m_MIXTURE_par_sum$Subjects$MIXabs)
-m_MIXTURE_par_sum <- as.data.frame(t(m_MIXTURE_par_sum))
 m_MIXTURE_par_sum$Signature <- "Muscle"
 m_MIXTURE_par_sum$Method <- "MIXTURE"
 
@@ -212,7 +208,6 @@ si_MIXTURE_par_sum <- MIXTURE(expressionMatrix = si_counts_par_sum,
                              verbose = TRUE,
                              nullDist = "PopulationBased") 
 si_MIXTURE_par_sum <- as.data.frame(si_MIXTURE_par_sum$Subjects$MIXabs)
-si_MIXTURE_par_sum <- as.data.frame(t(si_MIXTURE_par_sum))
 si_MIXTURE_par_sum$Signature <- "Small intestine"
 si_MIXTURE_par_sum$Method <- "MIXTURE"
 
@@ -258,7 +253,6 @@ s_MIXTURE_par_sum <- MIXTURE(expressionMatrix = s_counts_par_sum,
                              verbose = TRUE,
                              nullDist = "PopulationBased") 
 s_MIXTURE_par_sum <- as.data.frame(s_MIXTURE_par_sum$Subjects$MIXabs)
-s_MIXTURE_par_sum <- as.data.frame(t(s_MIXTURE_par_sum))
 s_MIXTURE_par_sum$Signature <- "Spleen"
 s_MIXTURE_par_sum$Method <- "MIXTURE"
 
