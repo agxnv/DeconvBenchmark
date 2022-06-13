@@ -490,6 +490,8 @@ conts_percent <- conts_percent %>%
 conts_percent <- subset(conts_percent,simcelltypes==estcelltypes)
 conts_percent$estcelltypes <- sapply(conts_percent$estcelltypes ,as.factor)
 
-Figure_3 <- ggplot(conts_percent,aes(x=estcelltypes,y=percent, fatten = NULL))+geom_violin()+geom_jitter(width = 0, height = 0, aes(shape = Signature))+ labs( x = "True number of coefficients",y = "% of estimated coefficients that matched") + 
-  facet_grid( ~ Method)+ scale_y_continuous(labels = scales::percent)
+Figure_3 <- ggplot(conts_percent,aes(x=estcelltypes,y=percent, fatten = NULL))+
+  geom_jitter(width = 0, height = 0, aes(shape = Signature, colour = Signature))+ 
+  labs( x = bquote(K[r]),y =bquote("% of estimated NCT that matched K"[r])) + 
+  facet_grid( ~ Method)+ scale_y_continuous(labels = scales::percent) 
 
