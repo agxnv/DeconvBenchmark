@@ -492,6 +492,6 @@ conts_percent$estcelltypes <- sapply(conts_percent$estcelltypes ,as.factor)
 
 Figure_3 <- ggplot(conts_percent,aes(x=estcelltypes,y=percent, fatten = NULL))+
   geom_jitter(width = 0, height = 0, aes(shape = Signature, colour = Signature))+ 
-  labs( x = bquote(K[r]),y =bquote("% of estimated NCT that matched K"[r])) + 
-  facet_grid( ~ Method)+ scale_y_continuous(labels = scales::percent) 
+  labs( x = bquote(K[r]),y =bquote("% of estimated NCTs that matched K"[r])) + 
+  facet_grid( ~ Method)+ scale_y_continuous(labels = scales::percent, limits = c(0,1)) 
 
