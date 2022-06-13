@@ -473,14 +473,23 @@ counts_FINAL <- rbind(K_final, L_final, MG_final, M_final, SI_final, S_final)
 
 #Figure
 
-counts_FINAL$simcelltypes <- as.factor(counts_FINAL$simcelltypes)
+counts_total <- counts_FINAL %>%  group_by(estcelltypes,simcelltypes, Signature, Method) %>% dplyr::summarize( total = n())
+counts_totalbeta <- counts_FINAL %>%  group_by(simcelltypes,Signature, Method) %>% dplyr::summarize( totalbeta = n())
 
-Figure_3 <- ggplot(counts_FINAL, aes(x=simcelltypes, y=estcelltypes)) +
-  geom_boxplot(aes(colour = Method),show.legend=TRUE,outlier.shape = NA, fatten = NULL) +
-  geom_jitter(width = 0.2, alpha = 0.1, height = 0) +
-  labs( x = "True number of coefficients",y = "Estimated number of coefficients", fill = "Method") + 
-  scale_y_continuous(name ="Estimated number of coefficients", breaks = c(0:22),labels=as.character(c(0:22))) +
-  theme(legend.key = element_blank(),plot.title = element_text(hjust=0.5,size = 16),axis.line = element_line(colour = "black"),
-        panel.background = element_blank(),axis.text = element_text(size = 12),axis.title = element_text(size = 14),
-        legend.position = "bottom") + 
-  facet_grid(Method ~ Signature) 
+conts_percent <- counts_totalbeta %>% left_join(counts_total,
+                               by = c("simcelltypes", "Signature", "Method"))
+
+conts_percent <- transform(conts_percent, percent = total / totalbeta)
+
+conts_percent$total <- NULL
+conts_percent$totalbeta <- NULL
+
+conts_percent <- conts_percent %>%
+  complete(Method, nesting(simcelltypes,estcelltypes,Signature), fill = list(percent = 0)) 
+
+conts_percent <- subset(conts_percent,simcelltypes==estcelltypes)
+conts_percent$estcelltypes <- sapply(conts_percent$estcelltypes ,as.factor)
+
+Figure_3 <- ggplot(conts_percent,aes(x=estcelltypes,y=percent, fatten = NULL))+geom_violin()+geom_jitter(width = 0, height = 0, aes(shape = Signature))+ labs( x = "True number of coefficients",y = "% of estimated coefficients that matched") + 
+  facet_grid( ~ Method)+ scale_y_continuous(labels = scales::percent)
+
