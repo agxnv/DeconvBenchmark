@@ -297,7 +297,7 @@ Figure_4 <- ggboxplot(NCT_null_test, x = "Method", y = "count", palette = "jco",
     breaks = get_breaks(by = 1, from = 0, to = 8)
   )
 
-Sup_Figure_1 <- ggpaired(subset(NCT_null_test, Method %in% c("MIXTURE", "CIBERSORT")), x = "Method", y = "count",
+Sup_Figure_2 <- ggpaired(subset(NCT_null_test, Method %in% c("MIXTURE", "CIBERSORT")), x = "Method", y = "count",
          line.color = "gray", line.size = 0.4,
          palette = "jco", xlab ="Method", ylab = "NCT")+
   stat_compare_means(paired = TRUE) 

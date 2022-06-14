@@ -431,7 +431,7 @@ Figure_5a <-  ggplot(inm_est_TP, aes(factor(Method), value)) +
   labs(x = "Methods",
        y = "Predicted percentages for TP") + scale_y_continuous(labels = scales::percent)
 
-Sup_Figure_3 <- ggplot(inm_est_TP, aes(factor(Signature), value)) +
+Sup_Figure_4 <- ggplot(inm_est_TP, aes(factor(Signature), value)) +
   geom_boxplot(fill = "grey80", colour = "#3366FF") +
   geom_jitter(width = 0, alpha = 0.5, height = 0)+
   labs(x = "Signature",
@@ -455,7 +455,7 @@ Figure_5b <-  ggplot(inm_est_FP, aes(factor(Method), value)) +
 
 inm_est_FP$Signature <- as.factor(inm_est_FP$Signature)
 
-Sup_Figure_4 <- ggplot(inm_est_FP, aes(x = Signature, y =value)) +
+Sup_Figure_5 <- ggplot(inm_est_FP, aes(x = Signature, y =value)) +
   geom_boxplot(fill = "grey80", colour = "#3366FF") +
   geom_jitter(width = 0.1, alpha = 0.5, height = 0) +
   labs(x = "Signature",
@@ -477,7 +477,7 @@ inm_est_TP$value <- as.numeric(inm_est_TP$value)
 inm_est_TP$Celltype <- as.factor(inm_est_TP$Celltype)
 TP_CM <- subset(inm_est_TP, Method %in% c("CIBERSORT","MIXTURE"))
 
-Sup_Figure_2 <- ggpaired(TP_CM, x = "Method", y = "value",
+Sup_Figure_3 <- ggpaired(TP_CM, x = "Method", y = "value",
                          line.color = "gray", line.size = 0.4,
                          palette = "jco", xlab ="Method", ylab = "Predicted percentage for TP")+
   stat_compare_means(paired = TRUE) + scale_y_continuous(labels = scales::percent)
