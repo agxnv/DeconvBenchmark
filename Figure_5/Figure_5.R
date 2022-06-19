@@ -3,6 +3,7 @@ library(readr)
 library(immunedeconv)
 library(tidyverse)
 library(ggpubr)
+library(reshape2)
 
 load("Figure_5/Data/simulated_immune.RData")
 
