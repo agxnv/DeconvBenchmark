@@ -4,6 +4,8 @@ library(MIXTURE)
 library(ggplot2)
 library(readr)
 library(reshape2)
+library(scales)
+library(ggpubr)
 
 load('Figure_2-3/Data/MixSims_BetaSims.RData')
 
@@ -475,16 +477,6 @@ counts_FINAL <- rbind(K_final, L_final, MG_final, M_final, SI_final, S_final)
 
 counts_FINAL$simcelltypes <- as.factor(counts_FINAL$simcelltypes)
 
-Sup_Figure_1 <- ggplot(counts_FINAL, aes(x=simcelltypes, y=estcelltypes)) +
-  geom_boxplot(aes(colour = Method),show.legend=TRUE,outlier.shape = NA, fatten = NULL) +
-  geom_jitter(width = 0.2, alpha = 0.1, height = 0) +
-  labs( x = bquote(K[r]) ,y = "Estimated NCT", fill = "Method") + 
-  scale_y_continuous(name ="Estimated NCT", breaks = c(0:22),labels=as.character(c(0:22))) +
-  theme(legend.key = element_blank(),plot.title = element_text(hjust=0.5,size = 16),axis.line = element_line(colour = "black"),
-        panel.background = element_blank(),axis.text = element_text(size = 12),axis.title = element_text(size = 14),
-        legend.position = "bottom") + 
-  facet_grid(Method ~ Signature) + theme(panel.border = element_rect(fill = NA), legend.position="none")
-
 counts_total <- counts_FINAL %>%  group_by(estcelltypes,simcelltypes, Signature, Method) %>% dplyr::summarize( total = n())
 counts_totalbeta <- counts_FINAL %>%  group_by(simcelltypes,Signature, Method) %>% dplyr::summarize( totalbeta = n())
 
@@ -499,11 +491,61 @@ conts_percent$totalbeta <- NULL
 conts_percent <- conts_percent %>%
   complete(Method, nesting(simcelltypes,estcelltypes,Signature), fill = list(percent = 0)) 
 
-conts_percent <- subset(conts_percent,simcelltypes==estcelltypes)
-conts_percent$estcelltypes <- sapply(conts_percent$estcelltypes ,as.factor)
+conts_percent_figure3 <- subset(conts_percent,simcelltypes==estcelltypes)
+conts_percent_figure3$estcelltypes <- sapply(conts_percent_figure$estcelltypes ,as.factor)
 
-Figure_3 <- ggplot(conts_percent,aes(x=estcelltypes,y=percent, fatten = NULL))+
+Figure_3 <- ggplot(conts_percent_figure3,aes(x=estcelltypes,y=percent, fatten = NULL))+
   geom_jitter(width = 0, height = 0, aes(shape = Signature, colour = Signature))+ 
   labs( x = bquote(K[r]),y =bquote("% of estimated NCTs that matched K"[r])) + 
   facet_grid( ~ Method)+ scale_y_continuous(labels = scales::percent, limits = c(0,1)) 
+
+counts_total_heatmap <- counts_FINAL %>%  group_by(estcelltypes,simcelltypes, Method, Signature) %>% dplyr::summarize( total = n())
+counts_totalbeta_heatmap <- counts_FINAL %>%  group_by(simcelltypes, Method, Signature) %>% dplyr::summarize( totalbeta = n())
+
+conts_percent_heatmap <- counts_totalbeta_heatmap %>% left_join(counts_total_heatmap,
+                                                by = c("simcelltypes", "Method","Signature"))
+
+conts_percent_heatmap <- transform(conts_percent_heatmap, percent = total / totalbeta)
+
+conts_percent_heatmap$total <- NULL
+conts_percent_heatmap$totalbeta <- NULL
+
+conts_percent_heatmap <- conts_percent_heatmap %>%
+  group_by(simcelltypes, Method, Signature) %>%
+  complete(estcelltypes = full_seq(1:8, 1), fill = list(percent = 0))
+
+conts_percent_heatmap$percent <- round(conts_percent_heatmap$percent,3) 
+
+greater5 <- conts_percent_heatmap %>%
+  group_by(simcelltypes, Method, Signature) %>%
+  dplyr::summarise(percent = sum(percent[estcelltypes > 5])) %>% 
+  ungroup()
+greater5$estcelltypes <- ">5"
+
+lower2 <- conts_percent_heatmap %>%
+  group_by(simcelltypes, Method, Signature) %>%
+  dplyr::summarise(percent = sum(percent[estcelltypes < 2])) %>% 
+  ungroup()
+lower2$estcelltypes <- "<2"
+
+conts_percent_heatmap_final <- rbind(greater5,lower2,subset(conts_percent_heatmap, estcelltypes >= 2 & estcelltypes <= 5))
+
+conts_percent_heatmap_final <- conts_percent_heatmap_final %>%
+  group_by(simcelltypes, Method, estcelltypes) %>%
+  dplyr::summarise(percent = sum(percent)/6) %>% 
+  ungroup()
+
+conts_percent_heatmap_final <- rbind(greater5,lower2,subset(conts_percent_heatmap, estcelltypes >= 2 & estcelltypes <= 5))
+
+conts_percent_heatmap_final$estcelltypes <- conts_percent_heatmap_final$estcelltypes %>% 
+  factor(levels=c("<2","2","3","4","5",">5"))
+
+conts_percent_heatmap_final$simcelltypes <- conts_percent_heatmap_final$simcelltypes %>% 
+  factor(levels=c("2","3","4","5"))
+
+SupFigure_1 <- ggplot(conts_percent_heatmap_final, aes(x=simcelltypes, y=estcelltypes, fill=percent, text=percent)) + 
+  geom_tile() + 
+  geom_text(aes(label = scales::percent(percent,accuracy = 0.1L)), size = 8 / .pt)  +
+  facet_grid(~Method) +
+  xlab(bquote(K[r])) + ylab("Estimated NCTs") + theme(plot.title = element_text(hjust = 0.5)) + guides(fill=guide_legend(title="Percentage", reverse=T)) + scale_x_discrete(label=abbreviate) + scale_fill_continuous(high = "red", low = "light blue",labels = percent)
 
