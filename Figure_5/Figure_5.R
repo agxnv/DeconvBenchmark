@@ -484,5 +484,5 @@ Sup_Figure_2 <- ggpaired(TP_CM, x = "Method", y = "value",
   stat_compare_means(paired = TRUE) + scale_y_continuous(labels = scales::percent)
 
 Figure_5 <- ggarrange(Figure_5a, Figure_5b,
-                      labels = c("(a)", "(b)"),
+                      labels = c("A", "B"),
                       ncol = 1, nrow = 2)

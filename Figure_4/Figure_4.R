@@ -303,5 +303,5 @@ Figure_4B <- ggpaired(subset(NCT_null_test, Method %in% c("MIXTURE", "CIBERSORT"
   stat_compare_means(paired = TRUE) 
 
 Figure_4 <- ggarrange(Figure_4A, Figure_4B,
-                      labels = c("(a)", "(b)"),
+                      labels = c("A", "B"),
                       ncol = 2, nrow = 1)
