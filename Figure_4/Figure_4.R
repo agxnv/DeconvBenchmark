@@ -1,5 +1,9 @@
 library(MIXTURE)
 library(readr)
+library(reshape2)
+library(tidyverse)
+library(ggpubr)
+
 source('Figure_4/Data/quanTIseq.EPIC.abs.R')
 load("Figure_4/Data/simulated_nonimmune.RData")
 
@@ -278,10 +282,6 @@ rownames(null_est) <- NULL
 
 #Figure
 
-library(reshape2)
-library(tidyverse)
-library(ggpubr)
-
 null_est_melt <- melt(null_est)
 
 NCT_null_test <- null_est_melt %>% filter(value != 0) %>% group_by(Method, Signature) %>% summarize(count=n()) %>% ungroup() 
@@ -290,14 +290,18 @@ NCT_null_test$Method <- as.factor(NCT_null_test$Method)
 NCT_null_test$variable <- as.factor(NCT_null_test$variable)
 
 my_comparisons <- list( c("CIBERSORT", "quanTIseq"), c("EPIC", "quanTIseq"), c("MIXTURE", "quanTIseq") )
-Figure_4 <- ggboxplot(NCT_null_test, x = "Method", y = "count", palette = "jco", xlab ="Method", ylab = "NCT")+ 
+Figure_4A <- ggboxplot(NCT_null_test, x = "Method", y = "count", palette = "jco", xlab ="Method", ylab = "NCT")+ 
   stat_compare_means(comparisons = my_comparisons)+ # Add pairwise comparisons p-value
   stat_compare_means(label.y = 10) +
   scale_y_continuous(
     breaks = get_breaks(by = 1, from = 0, to = 8)
   )
 
-Sup_Figure_2 <- ggpaired(subset(NCT_null_test, Method %in% c("MIXTURE", "CIBERSORT")), x = "Method", y = "count",
+Figure_4B <- ggpaired(subset(NCT_null_test, Method %in% c("MIXTURE", "CIBERSORT")), x = "Method", y = "count",
          line.color = "gray", line.size = 0.4,
          palette = "jco", xlab ="Method", ylab = "NCT")+
   stat_compare_means(paired = TRUE) 
+
+Figure_4 <- ggarrange(Figure_4A, Figure_4B,
+                      labels = c("(a)", "(b)"),
+                      ncol = 2, nrow = 1)
