@@ -1,5 +1,4 @@
-#Figure_1b: 
-rm(list=ls())
+ rm(list=ls())
 library(immunedeconv)
 library(ComplexHeatmap)
 library(circlize)
@@ -379,13 +378,4 @@ Spleen_heatmap <-
   Heatmap(S_EPIC_proportions, cluster_rows = FALSE, column_title_gp = gpar(fontsize=20), show_column_names = TRUE, show_row_names = FALSE, cluster_columns = FALSE,column_title = "EPIC",name = "EPIC",col = colorRamp2(c(0, 1), c("blue",  "red")),show_heatmap_legend = F) +
   Heatmap(S_MIXTURE_proportions, cluster_rows = FALSE, column_title_gp = gpar(fontsize=20), show_row_names = FALSE, cluster_columns = FALSE, column_title = "MIXTURE",name = "MIXTURE",col = colorRamp2(c(0, 1), c("blue",  "red")),show_heatmap_legend = FALSE, show_column_names = TRUE) +
   Heatmap(S_quanTIseq_proportions, cluster_rows = FALSE, column_title_gp = gpar(fontsize=20), show_row_names = TRUE, cluster_columns = FALSE, column_title = "quanTIseq",name = "quanTIseq",col = colorRamp2(c(0, 1), c("blue",  "red")),show_heatmap_legend = F, show_column_names = TRUE)
-
-#Save plot in PDF 12x6
-pdf("Spleen_ST.pdf",width=12,height=6)
-print(Spleen_heatmap)
-dev.off()
-
-
-#Me falta: Leyenda NAs
-
 
