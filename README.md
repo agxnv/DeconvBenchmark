@@ -11,6 +11,18 @@ Molecular signatures
 --------------------
 We tested the [murine tissue-specific molecular signatures](https://github.com/wuaipinglab/ImmuCC/tree/master/tissue_immucc/SignatureMatrix) developed by Chen et al. (_Ziyi Chen, Chengyang Ji, Qin Shen, Wei Liu, F Xiao-Feng Qin, Aiping Wu, Tissue-specific deconvolution of immune cell composition by integrating bulk and single-cell transcriptomes, Bioinformatics, 2020_). 
 
+Datasets
+--------
+Our tests requiere certain simulated and semi-simulated samples data to be performed. For our work, we used murine [sc-RNASeq data](https://figshare.com/articles/dataset/MCA_DGE_Data/5435866?file=10756795) from the Mouse Cell Atlas (_Han, X. et al. Mapping the Mouse Cell Atlas by Microwell-Seq. Cell, 2018_).
+
+* Bias test: The user can generate simulated bulk samples based on any molecular signature to test with the function [SimulatedMixtures](https://rdrr.io/github/elmerfer/MIXTURE/man/SimulatedMixtures.html) from the [MIXTURE](https://github.com/elmerfer/MIXTURE) package.
+* Null test: For semi-simulated pooled samples containing parenchymatous and stromal cells from murine tissues, see the file ["simulated_nonimmune.RData"](https://github.com/agxnv/DeconvBenchmark/blob/main/Data/simulated_nonimmune.RData).
+* True positive cases test: For semi-simulated pooled samples containing just one immune cell-type cells from murine tissues, see the file ["simulated_immune.RData"](https://github.com/agxnv/DeconvBenchmark/blob/main/Data/simulated_immune.RData).
+
+All the semi-simulated pooled samples were transformed from raw counts to TPM. For calculating the length of each gene, we took the reference genome used to annotate the expression matrices ([Mus musculus GRCm 38.88](https://ftp.ensembl.org/pub/release-88/gtf/mus_musculus/Mus_musculus.GRCm38.88.gtf.gz)), aggregated and averaged the exon’s length for each version of that gene available. See the file ["tpm_calculator.R"](https://github.com/agxnv/DeconvBenchmark/blob/main/Data/tpm_calculator.R).
+
+
+
 Deconvolution methods
 ---------------------
 We tested six reference-based methods made to deconvolve bulk RNA-Seq samples. 
@@ -25,15 +37,6 @@ We tested six reference-based methods made to deconvolve bulk RNA-Seq samples.
 | quanTIseq | R package: [immunedeconv](https://link.springer.com/protocol/10.1007/978-1-0716-0327-7_16) v2.0.4 | Finotello F, Mayer C, Plattner C, Laschober G, Rieder D, Hackl H, Krogsdam A, Loncova Z, Posch W, Wilflingseder D, Sopper S, Ijsselsteijn M, Brouwer TP, Johnson D, Xu Y, Wang Y, Sanders ME, Estrada MV, Ericsson-Gonzalez P, Charoentong P, Balko J, de Miranda NFDCC, Trajanoski Z. Molecular and pharmacological modulators of the tumor immune contexture revealed by deconvolution of RNA-seq data. Genome Medicine, 2019 |
 
 
-Datasets
---------
-Our tests requiere certain simulated and semi-simulated samples data to be performed. For our work, we used murine [sc-RNASeq data](https://figshare.com/articles/dataset/MCA_DGE_Data/5435866?file=10756795) from the Mouse Cell Atlas (_Han, X. et al. Mapping the Mouse Cell Atlas by Microwell-Seq. Cell, 2018_).
-
-* Bias test: The user can generate simulated bulk samples based on any molecular signature to test with the function [SimulatedMixtures](https://rdrr.io/github/elmerfer/MIXTURE/man/SimulatedMixtures.html) from the [MIXTURE](https://github.com/elmerfer/MIXTURE) package.
-* Null test: For semi-simulated pooled samples containing parenchymatous and stromal cells from murine tissues, see the file ["simulated_nonimmune.RData"](https://github.com/agxnv/DeconvBenchmark/blob/main/Data/simulated_nonimmune.RData).
-* True positive cases test: For semi-simulated pooled samples containing just one immune cell-type cells from murine tissues, see the file ["simulated_immune.RData"](https://github.com/agxnv/DeconvBenchmark/blob/main/Data/simulated_immune.RData).
-
-All the semi-simulated pooled samples were transformed from raw counts to TPM. For calculating the length of each gene, we took the reference genome used to annotate the expression matrices ([Mus musculus GRCm 38.88](https://ftp.ensembl.org/pub/release-88/gtf/mus_musculus/Mus_musculus.GRCm38.88.gtf.gz)), aggregated and averaged the exon’s length for each version of that gene available. See the file ["tpm_calculator.R"](https://github.com/agxnv/DeconvBenchmark/blob/main/Data/tpm_calculator.R).
 
 Authors
 -------
