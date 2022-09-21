@@ -40,5 +40,5 @@ We tested six reference-based methods made to deconvolve bulk RNA-Seq samples.
 
 Authors
 -------
-* Elmer A. Fernández - [efernandez@cidie.ucc.edu.ar](mailto:efernandez@cidie.ucc.edu.ar)
-* Agustín Nava (PhD candidate) - [agustin.nava@huesped.org.ar](mailto:agustin.nava@huesped.org.ar)
+* **Elmer A. Fernández - *Idea* and Developer - [Profile](https://www.researchgate.net/profile/Elmer_Fernandez) - [CIDIE]- [CONICET]
+* **Agustín Nava (PhD candidate) - [agustin.nava@huesped.org.ar](mailto:agustin.nava@huesped.org.ar)
