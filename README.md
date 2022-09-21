@@ -7,10 +7,6 @@ Step-by-step guide
 ------------------
 For a guided tutorial through the tests proposed in our benchmarking algorithm, see the file "Tutorial.R". 
 
-Molecular signatures
---------------------
-We tested the [murine tissue-specific molecular signatures](https://github.com/wuaipinglab/ImmuCC/tree/master/tissue_immucc/SignatureMatrix) developed by Chen et al. (_Ziyi Chen, Chengyang Ji, Qin Shen, Wei Liu, F Xiao-Feng Qin, Aiping Wu, Tissue-specific deconvolution of immune cell composition by integrating bulk and single-cell transcriptomes, Bioinformatics, 2020_). 
-
 Datasets
 --------
 Our tests requiere certain simulated and semi-simulated samples data to be performed. For our work, we used murine [sc-RNASeq data](https://figshare.com/articles/dataset/MCA_DGE_Data/5435866?file=10756795) from the Mouse Cell Atlas (_Han, X. et al. Mapping the Mouse Cell Atlas by Microwell-Seq. Cell, 2018_).
@@ -21,7 +17,9 @@ Our tests requiere certain simulated and semi-simulated samples data to be perfo
 
 All the semi-simulated pooled samples were transformed from raw counts to TPM. For calculating the length of each gene, we took the reference genome used to annotate the expression matrices ([Mus musculus GRCm 38.88](https://ftp.ensembl.org/pub/release-88/gtf/mus_musculus/Mus_musculus.GRCm38.88.gtf.gz)), aggregated and averaged the exon’s length for each version of that gene available. See the file ["tpm_calculator.R"](https://github.com/agxnv/DeconvBenchmark/blob/main/Data/tpm_calculator.R).
 
-
+Molecular signatures
+--------------------
+We tested the [murine tissue-specific molecular signatures](https://github.com/wuaipinglab/ImmuCC/tree/master/tissue_immucc/SignatureMatrix) developed by Chen et al. (_Ziyi Chen, Chengyang Ji, Qin Shen, Wei Liu, F Xiao-Feng Qin, Aiping Wu, Tissue-specific deconvolution of immune cell composition by integrating bulk and single-cell transcriptomes, Bioinformatics, 2020_). 
 
 Deconvolution methods
 ---------------------
@@ -35,8 +33,6 @@ We tested six reference-based methods made to deconvolve bulk RNA-Seq samples.
 | EPIC | R package: EPIC v1.1.5 |Racle, J., Jonge, K. de, Baumgaertner, P., Speiser, D.E., and Gfeller, D. Simultaneous enumeration of cancer and immune cell types from bulk tumor gene expression data. eLife, 6, e26476, 2017 |
 | MIXTURE | R package: [MIXTURE v0.0.1](https://github.com/elmerfer/MIXTURE) | Fernández EA, Mahmoud YD, Veigas F et al. Unveiling the immune infiltrate modulation in cancer and response to immunotherapy by MIXTURE-an enhanced deconvolution method. Brief Bioinform, 20;22(4), 2021 |
 | quanTIseq | R package: [immunedeconv](https://link.springer.com/protocol/10.1007/978-1-0716-0327-7_16) v2.0.4 | Finotello F, Mayer C, Plattner C, Laschober G, Rieder D, Hackl H, Krogsdam A, Loncova Z, Posch W, Wilflingseder D, Sopper S, Ijsselsteijn M, Brouwer TP, Johnson D, Xu Y, Wang Y, Sanders ME, Estrada MV, Ericsson-Gonzalez P, Charoentong P, Balko J, de Miranda NFDCC, Trajanoski Z. Molecular and pharmacological modulators of the tumor immune contexture revealed by deconvolution of RNA-seq data. Genome Medicine, 2019 |
-
-
 
 Authors
 -------
