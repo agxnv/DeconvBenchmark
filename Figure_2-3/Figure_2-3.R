@@ -20,25 +20,6 @@ sigs <- list(BM = read.csv("Figure_2-3/Data/MS/BM.csv", row.names = 1, check.nam
 
 load('Figure_2-3/Data/simulated_biastest.RData')
 
-mixsims <- list(BM = BM_mixsim,
-                K = K_mixsim,
-                L = L_mixsim,
-                LU = LU_mixsim,
-                MG = MG_mixsim)
-
-BM_betasim$ID <- colnames(BM_mixsim)
-BM_betasim <- melt(as.data.frame(BM_betasim), id.vars = "ID", value.name = "betasim")
-
-LU_betasim$ID <- colnames(LU_mixsim)
-LU_betasim <- melt(as.data.frame(LU_betasim), id.vars = "ID", value.name = "betasim")
-
-betasims <- list(BM = BM_betasim,
-                 K = K_betasim,
-                 L = L_betasim,
-                 LU = LU_betasim,
-                 MG = MG_betasim) %>% 
-  bind_rows(.id = "Signature")
-
 CIBERSORTx_mixsims_list <- list(BM = read_table2("Figure_2-3/Data/CIBERSORTx_estimations/BoneMarrow_CIBERSORTx.txt")[,c(1:11)],
                               K = read_table2("Figure_2-3/Data/CIBERSORTx_estimations/Kidney_CIBERSORTx.txt")[,c(1:9)],
                               L = read_table2("Figure_2-3/Data/CIBERSORTx_estimations/Liver_CIBERSORTx.txt")[,c(1:9)],
@@ -65,8 +46,6 @@ DCQ_BA <- left_join(DCQ_mixsims_list,
                     by = c("Signature", "ID","variable"))[,c(1,4,5)] %>% 
   mutate(difs = betahat - betasim) %>% 
   mutate(Method = "DCQ")
-
-asd <- estCellPercent.DeconRNASeq(refExpr = sigs$LU, geneExpr = mixsims$LU)
 
 DeconRNASeq_mixsims_list <- mapply(FUN = estCellPercent.DeconRNASeq,refExpr = sigs, geneExpr = mixsims,SIMPLIFY=FALSE)
 DeconRNASeq_mixsims_list <- lapply(DeconRNASeq_mixsims_list, function(x) setNames(melt(t(x/100)), nm = c("ID","variable","betahat"))) %>% 
