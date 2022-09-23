@@ -3,6 +3,8 @@ DeconvBenchmark
 This repository holds all the data and code to perform our proposed benchmarking tests over immune cell deconvolution methods and molecular signatures. 
 Performing these evaluations brings a framework for a fair measurement and comparision of the prediction accuracy and cell-type detection performance of any deconvolution method-molecular signature pair that the user would want to test. 
 
+![1328](https://user-images.githubusercontent.com/68829569/191877734-4a5b1ad9-bc4d-4d3b-8f15-941fa8f8f365.png)
+
 Step-by-step guide
 ------------------
 For a guided tutorial through the tests proposed in our benchmarking algorithm, see the file "Tutorial.R". 
