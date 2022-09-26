@@ -35,7 +35,7 @@ CIBERSORTx_BA <- left_join(CIBERSORTx_mixsims_list,
           betasims,
           by = c("Signature", "ID","variable"))[,c(1,4,5)] %>% 
   mutate(difs = betahat - betasim) %>% 
-  mutate(Method = "CIBERSORTxx")
+  mutate(Method = "CIBERSORTx")
 
 DCQ_mixsims_list <- mapply(FUN = estCellPercent.DCQ,refExpr = sigs, geneExpr = mixsims,SIMPLIFY=FALSE)
 DCQ_mixsims_list <- lapply(DCQ_mixsims_list, function(x) setNames(melt(t((x/100)[!(row.names(x) == "others"), ])), nm = c("ID","variable","betahat"))) %>% 
@@ -123,19 +123,22 @@ Sup_Table2 <- rbind(CIBERSORTx_BA,DeconRNASeq_BA,DCQ_BA,EPIC_BA,MIXTURE_BA,quanT
                             betahat == 0 & betasim == 0 ~ "TN",
                             betahat == 0 & betasim > 0 ~ "FN"
   )) %>% 
-  group_by(result,Method) %>% 
+  group_by(result,Method,Signature) %>% 
   dplyr::summarize(count=n()) %>% 
   ungroup() %>% 
-  complete(result, nesting(Method), fill = list(count = 0))
+  complete(result, nesting(Method,Signature), fill = list(count = 0))
 
-Sup_Table2 <- dcast(data = Sup_Table2,formula = Method~result,fun.aggregate = sum,value.var = "count")
+Sup_Table2 <- dcast(data = Sup_Table2,formula = Method + Signature~result,fun.aggregate = sum,value.var = "count")
 
 Sup_Table2 <- Sup_Table2 %>% 
   transform(Se = TP / (TP + FN)) %>% 
   transform(Sp = TN / (TN + FP)) %>% 
   transform(PPV = TP / (TP + FP)) %>% 
   transform(NPV = TN / (TN + FN)) %>% 
-  transform(F1 = (2 * TP) / ((2 * TP) + FP + FN)) %>%
+  transform(F1 = (2 * TP) / ((2 * TP) + FP + FN))
+Sup_Table2$NPV[Sup_Table2$Method == "EPIC"] <- 0
+
+Sup_Table2 <- Sup_Table2 %>% 
   transform(DOP = sqrt(((Se - 1)^2)+((Sp - 1)^2)+((PPV - 1)^2)+((NPV - 1)^2))) %>% 
   transform(ER = (FP + FN)/(FP + FN + TP + TN))
 
@@ -302,6 +305,6 @@ conts_percent_heatmap_final$simcelltypes <- conts_percent_heatmap_final$simcellt
 SupFigure_1 <- ggplot(conts_percent_heatmap_final, aes(x=simcelltypes, y=estcelltypes, fill=percent, text=percent)) + 
   geom_tile() + 
   geom_text(aes(label = scales::percent(percent,accuracy = 0.1L)), size = 8 / .pt)  +
-  facet_grid(Signature~Method) +
+  facet_grid(Method~Signature, scales = "free") +
   xlab(bquote(K[r])) + ylab("Estimated NCTs") + theme(plot.title = element_text(hjust = 0.5)) + guides(fill=guide_legend(title="Percentage", reverse=T)) + scale_x_discrete(label=abbreviate) + scale_fill_continuous(high = "red", low = "light blue",labels = percent) +
   theme(legend.position = "none")
