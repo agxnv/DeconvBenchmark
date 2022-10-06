@@ -236,3 +236,79 @@ Sup_Table1 <- cortotal %>%
             mean = mean(value),
             sd = sd(value)) %>% 
   ungroup()
+
+
+#Sup figure 1
+
+DCQ_list_supfig1 <- lapply(DCQ_list, function(x) melt(x))
+DCQ_list_supfig1 <-  DCQ_list_supfig1 %>% bind_rows(.id = "Signature")
+DCQ_list_supfig1 <- DCQ_list_supfig1[DCQ_list_supfig1$Var1 != DCQ_list_supfig1$Var2,]
+DCQ_list_supfig1 <- DCQ_list_supfig1[complete.cases(DCQ_list_supfig1),]
+DCQ_list_supfig1$Method <- "DCQ"
+
+CIBERSORTx_list_supfig1 <- lapply(CIBERSORTx_list, function(x) melt(x))
+CIBERSORTx_list_supfig1 <-  CIBERSORTx_list_supfig1 %>% bind_rows(.id = "Signature")
+CIBERSORTx_list_supfig1 <- CIBERSORTx_list_supfig1[CIBERSORTx_list_supfig1$Var1 != CIBERSORTx_list_supfig1$Var2,]
+CIBERSORTx_list_supfig1 <- CIBERSORTx_list_supfig1[complete.cases(CIBERSORTx_list_supfig1),]
+CIBERSORTx_list_supfig1$Method <- "CIBERSORTx"
+
+EPIC_list_supfig1 <- lapply(EPIC_list, function(x) melt(x))
+EPIC_list_supfig1 <-  EPIC_list_supfig1 %>% bind_rows(.id = "Signature")
+EPIC_list_supfig1 <- EPIC_list_supfig1[EPIC_list_supfig1$Var1 != EPIC_list_supfig1$Var2,]
+EPIC_list_supfig1 <- EPIC_list_supfig1[complete.cases(EPIC_list_supfig1),]
+EPIC_list_supfig1$Method <- "EPIC"
+
+quanTIseq_list_supfig1 <- lapply(quanTIseq_list, function(x) melt(x))
+quanTIseq_list_supfig1 <-  quanTIseq_list_supfig1 %>% bind_rows(.id = "Signature")
+quanTIseq_list_supfig1 <- quanTIseq_list_supfig1[quanTIseq_list_supfig1$Var1 != quanTIseq_list_supfig1$Var2,]
+quanTIseq_list_supfig1 <- quanTIseq_list_supfig1[complete.cases(quanTIseq_list_supfig1),]
+quanTIseq_list_supfig1$Method <- "quanTIseq"
+
+sigs_cor_5 <- list(K = read.csv("Figure_1/Data/MS/K.csv", row.names = 1, check.names=FALSE),
+                   L = read.csv("Figure_1/Data/MS/L.csv", row.names = 1, check.names=FALSE),
+                   MG = read.csv("Figure_1/Data/MS/MG.csv", row.names = 1, check.names=FALSE))
+
+sigs_cor_5 <- lapply(sigs_cor_5, function(x) {x <- x[,order(colnames(x))];
+colnames(x) <- c("B","Bsp","Dnd","Mcr","Mnc","PMN","NK","T");
+x <- as.matrix(round(cor(x),2));
+x})
+
+lu_cor <- read.csv("Figure_1/Data/MS/LU.csv", row.names = 1, check.names=FALSE)
+lu_cor <- lu_cor[,order(colnames(lu_cor))]
+colnames(lu_cor) <- c("B","Bsp","Dnd","Eo","Mcr","Mnc","PMN","NK","T")
+lu_cor <- round(cor(lu_cor),2)
+
+bm_cor <- read.csv("Figure_1/Data/MS/BM.csv", row.names = 1, check.names=FALSE)
+bm_cor <- bm_cor[,order(colnames(bm_cor))]
+colnames(bm_cor) <- c("B","Bsp","Dnd","Eo","Mcr","Mst", "Mnc","PMN","NK","T")
+bm_cor <- round(cor(bm_cor),2)
+
+bm_cor[lower.tri(bm_cor, diag = TRUE)] <- NA
+BM_melted_table <- melt(bm_cor, na.rm = TRUE, value.name = "cor")
+BM_melted_table$Signature <- "BM"
+sigs_cor_5$K[lower.tri(sigs_cor_5$K, diag = TRUE)] <- NA
+K_melted_table <- melt(sigs_cor_5$K, na.rm = TRUE, value.name = "cor")
+K_melted_table$Signature <- "K"
+sigs_cor_5$L[lower.tri(sigs_cor_5$L, diag = TRUE)] <- NA
+L_melted_table <- melt(sigs_cor_5$L, na.rm = TRUE, value.name = "cor")
+L_melted_table$Signature <- "L"
+lu_cor[lower.tri(lu_cor, diag = TRUE)] <- NA
+LU_melted_table <- melt(lu_cor, na.rm = TRUE, value.name = "cor")
+LU_melted_table$Signature <- "LU"
+sigs_cor_5$MG[lower.tri(sigs_cor_5$MG, diag = TRUE)] <- NA
+MG_melted_table <- melt(sigs_cor_5$MG, na.rm = TRUE, value.name = "cor")
+MG_melted_table$Signature <- "MG"
+
+cortotal <- rbind(K_melted_table,L_melted_table,MG_melted_table,BM_melted_table,LU_melted_table) %>% arrange(Signature)
+cortotal[166:330,] <- cortotal[,c(2,1,3,4)]
+
+Supfig1_df <- rbind(EPIC_list_supfig1,CIBERSORTx_list_supfig1,DCQ_list_supfig1,quanTIseq_list_supfig1)
+Supfig1_df<- left_join(Supfig1_df,
+                       cortotal,
+                       by = c("Signature","Var1","Var2"))
+
+Sup_fig_1 <- ggplot(Supfig1_df, aes(x=cor, y=value)) +
+  geom_point() +
+  facet_grid(~Method) +
+  xlab("Correlation between the deconvolved MS profile and the detected cell type") +
+  ylab("Estimated coefficient")+ stat_smooth(method="lm", se=FALSE, color="red")

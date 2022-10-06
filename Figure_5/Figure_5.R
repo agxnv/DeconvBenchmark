@@ -132,7 +132,7 @@ Figure_5a <-  ggplot(inm_est_TP, aes(factor(Method), beta_hat)) +
   labs(x = "Methods",
        y = "Predicted percentages for TP") + scale_y_continuous(labels = scales::percent)
 
-Sup_Figure_3 <- ggplot(inm_est_TP, aes(factor(Signature), beta_hat)) +
+Sup_Figure_4 <- ggplot(inm_est_TP, aes(factor(Signature), beta_hat)) +
   geom_boxplot(fill = "grey80", colour = "#3366FF") +
   geom_jitter(width = 0, alpha = 0.5, height = 0)+
   labs(x = "Signature",
@@ -155,7 +155,7 @@ Figure_5b <-  ggplot(inm_est_FP, aes(factor(Method), beta_hat)) +
 
 inm_est_FP$Signature <- as.factor(inm_est_FP$Signature)
 
-Sup_Figure_4 <- ggplot(inm_est_FP, aes(x = Signature, y =beta_hat)) +
+Sup_Figure_5 <- ggplot(inm_est_FP, aes(x = Signature, y =beta_hat)) +
   geom_boxplot(fill = "grey80", colour = "#3366FF") +
   geom_jitter(width = 0.1, alpha = 0.5, height = 0) +
   labs(x = "Signature",
@@ -175,7 +175,7 @@ inm_est_TP <- inm_est_melt %>% filter(ID == variable)
 inm_est_TP$beta_hat <- as.numeric(inm_est_TP$beta_hat)
 TP_CM <- subset(inm_est_TP, Method %in% c("CIBERSORTx","MIXTURE"))
 
-Sup_Figure_2 <- ggpaired(TP_CM, x = "Method", y = "beta_hat",
+Sup_Figure_3 <- ggpaired(TP_CM, x = "Method", y = "beta_hat",
                          line.color = "gray", line.size = 0.4,
                          palette = "jco", xlab ="Method", ylab = "Predicted percentage for TP")+
   stat_compare_means(paired = TRUE) + scale_y_continuous(labels = scales::percent)
@@ -184,3 +184,51 @@ Figure_5 <- ggarrange(Figure_5a, Figure_5b,
                       labels = c("A", "B"),
                       ncol = 1, nrow = 2)
 
+sigs_cor_5 <- list(K = read.csv("Figure_1/Data/MS/K.csv", row.names = 1, check.names=FALSE),
+                   L = read.csv("Figure_1/Data/MS/L.csv", row.names = 1, check.names=FALSE),
+                   MG = read.csv("Figure_1/Data/MS/MG.csv", row.names = 1, check.names=FALSE))
+
+sigs_cor_5 <- lapply(sigs_cor_5, function(x) {x <- x[,order(colnames(x))];
+x <- as.matrix(round(cor(x),2));
+x})
+
+lu_cor <- read.csv("Figure_1/Data/MS/LU.csv", row.names = 1, check.names=FALSE)
+lu_cor <- lu_cor[,order(colnames(lu_cor))]
+lu_cor <- round(cor(lu_cor),2)
+
+bm_cor <- read.csv("Figure_1/Data/MS/BM.csv", row.names = 1, check.names=FALSE)
+bm_cor <- bm_cor[,order(colnames(bm_cor))]
+bm_cor <- round(cor(bm_cor),2)
+
+bm_cor[lower.tri(bm_cor, diag = TRUE)] <- NA
+BM_melted_table <- melt(bm_cor, na.rm = TRUE, value.name = "cor")
+BM_melted_table$Signature <- "BM"
+sigs_cor_5$K[lower.tri(sigs_cor_5$K, diag = TRUE)] <- NA
+K_melted_table <- melt(sigs_cor_5$K, na.rm = TRUE, value.name = "cor")
+K_melted_table$Signature <- "K"
+sigs_cor_5$L[lower.tri(sigs_cor_5$L, diag = TRUE)] <- NA
+L_melted_table <- melt(sigs_cor_5$L, na.rm = TRUE, value.name = "cor")
+L_melted_table$Signature <- "L"
+lu_cor[lower.tri(lu_cor, diag = TRUE)] <- NA
+LU_melted_table <- melt(lu_cor, na.rm = TRUE, value.name = "cor")
+LU_melted_table$Signature <- "LU"
+sigs_cor_5$MG[lower.tri(sigs_cor_5$MG, diag = TRUE)] <- NA
+MG_melted_table <- melt(sigs_cor_5$MG, na.rm = TRUE, value.name = "cor")
+MG_melted_table$Signature <- "MG"
+
+cortotal <- rbind(K_melted_table,L_melted_table,MG_melted_table,BM_melted_table,LU_melted_table) %>% arrange(Signature)
+cortotal$names <- paste0(cortotal$Var1,", ",cortotal$Var2)
+cortotal$names <- sapply(lapply(strsplit(cortotal$names, split = ",\\s*"), sort), paste, collapse = ", ")
+cortotal <- cortotal[,-c(1,2)]
+
+inm_est_FP$names <- paste0(inm_est_FP$ID,", ",inm_est_FP$variable)
+inm_est_FP$names <- sapply(lapply(strsplit(inm_est_FP$names, split = ",\\s*"), sort), paste, collapse = ", ")
+
+inm_est_FP <- left_join(inm_est_FP,
+                        cortotal,
+                        by = c("names","Signature"))
+Sup_fig_6 <- ggplot(inm_est_FP, aes(x=cor, y=beta_hat)) +
+  geom_point() +
+  facet_grid(~Method) +
+  xlab("Correlation between the deconvolved cell type and the detected cell type") +
+  ylab("Estimated coefficient")+ stat_smooth(method="lm", se=FALSE, color="red")

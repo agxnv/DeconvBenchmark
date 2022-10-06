@@ -117,6 +117,31 @@ L_BA <- BA.plot(rbind(CIBERSORTx_BA[CIBERSORTx_BA$Signature == "L",c(2:5)],DCQ_B
 LU_BA <- BA.plot(rbind(CIBERSORTx_BA[CIBERSORTx_BA$Signature == "LU",c(2:5)],DCQ_BA[DCQ_BA$Signature == "LU",c(2:5)],DeconRNASeq_BA[DeconRNASeq_BA$Signature == "LU",c(2:5)],EPIC_BA[EPIC_BA$Signature == "LU",c(2:5)],MIXTURE_BA[MIXTURE_BA$Signature == "LU",c(2:5)],quanTIseq_BA[quanTIseq_BA$Signature == "LU",c(2:5)]),title = "Lung",graph = "Lung")
 MG_BA <- BA.plot(rbind(CIBERSORTx_BA[CIBERSORTx_BA$Signature == "MG",c(2:5)],DCQ_BA[DCQ_BA$Signature == "MG",c(2:5)],DeconRNASeq_BA[DeconRNASeq_BA$Signature == "MG",c(2:5)],EPIC_BA[EPIC_BA$Signature == "MG",c(2:5)],MIXTURE_BA[MIXTURE_BA$Signature == "MG",c(2:5)],quanTIseq_BA[quanTIseq_BA$Signature == "MG",c(2:5)]),title = "Mammary gland",graph = "Mammary gland")
 
+Table2 <- rbind(CIBERSORTx_BA,DeconRNASeq_BA,DCQ_BA,EPIC_BA,MIXTURE_BA,quanTIseq_BA) %>%
+  mutate(result = case_when(betahat > 0 & betasim > 0 ~ "TP", 
+                            betahat > 0 & betasim == 0 ~ "FP",
+                            betahat == 0 & betasim == 0 ~ "TN",
+                            betahat == 0 & betasim > 0 ~ "FN"
+  )) %>% 
+  group_by(result,Method) %>% 
+  dplyr::summarize(count=n()) %>% 
+  ungroup() %>% 
+  complete(result, nesting(Method), fill = list(count = 0))
+
+Table2 <- dcast(data = Table2,formula = Method~result,fun.aggregate = sum,value.var = "count")
+
+Table2 <- Table2 %>% 
+  transform(Se = TP / (TP + FN)) %>% 
+  transform(Sp = TN / (TN + FP)) %>% 
+  transform(PPV = TP / (TP + FP)) %>% 
+  transform(NPV = TN / (TN + FN)) %>% 
+  transform(F1 = (2 * TP) / ((2 * TP) + FP + FN))
+Table2$NPV[Table2$Method == "EPIC"] <- 0
+
+Table2 <- Table2 %>% 
+  transform(DOP = sqrt(((Se - 1)^2)+((Sp - 1)^2)+((PPV - 1)^2)+((NPV - 1)^2))) %>% 
+  transform(ER = (FP + FN)/(FP + FN + TP + TN))
+
 Sup_Table2 <- rbind(CIBERSORTx_BA,DeconRNASeq_BA,DCQ_BA,EPIC_BA,MIXTURE_BA,quanTIseq_BA) %>%
   mutate(result = case_when(betahat > 0 & betasim > 0 ~ "TP", 
                             betahat > 0 & betasim == 0 ~ "FP",
@@ -302,7 +327,7 @@ conts_percent_heatmap_final$estcelltypes <- conts_percent_heatmap_final$estcellt
 conts_percent_heatmap_final$simcelltypes <- conts_percent_heatmap_final$simcelltypes %>% 
   factor(levels=c("2","3","4","5","6","7"))
 
-SupFigure_1 <- ggplot(conts_percent_heatmap_final, aes(x=simcelltypes, y=estcelltypes, fill=percent, text=percent)) + 
+SupFigure_2 <- ggplot(conts_percent_heatmap_final, aes(x=simcelltypes, y=estcelltypes, fill=percent, text=percent)) + 
   geom_tile() + 
   geom_text(aes(label = scales::percent(percent,accuracy = 0.1L)), size = 8 / .pt)  +
   facet_grid(Method~Signature, scales = "free") +
