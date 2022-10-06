@@ -1,5 +1,7 @@
 #This document its a step-by-step guide to perform the benchmarking algorithm 
-#for deconvolution methods and molecular signatures described in "Deconv...". 
+#for deconvolution methods and molecular signatures described in the paper:
+#"Agreement and cell-type identification metrics for an appropriate evaluation 
+#of molecular signature-based deconvolution methods". 
 #These tests allow to evaluate the estimation accuracy and classificatory 
 #competence of each deconvolution method, detect bias over its results, and 
 #serve as a fair comparision framework between other molecular signature based 
@@ -7,7 +9,8 @@
 #a DM changes when paired to different molecular signatures. 
 
 #In the examples presented bellow, we're going to test the EPIC and MIXTURE
-#methods, paired to two murine tissue-specific MSs (Chen).  
+#methods, paired to two murine tissue-specific MSs (Chen et al.,
+#DOI: 10.1093/bioinformatics/btz672).  
 
 #Step 0: Load the DMs packages and the molecular signatures
 
@@ -105,9 +108,9 @@ MG_heatmap <-
 #the falsely detected cell-type coefficients, we can plot them against the 
 #inter-celltype profile correlation.
 
-sigs_cor_5 <- list(K = read.csv("Figure_1/Data/MS/K.csv", row.names = 1, check.names=FALSE),
-                   L = read.csv("Figure_1/Data/MS/L.csv", row.names = 1, check.names=FALSE),
-                   MG = read.csv("Figure_1/Data/MS/MG.csv", row.names = 1, check.names=FALSE))
+sigs_cor_5 <- list(K = read.csv("Data/MS/K.csv", row.names = 1, check.names=FALSE),
+                   L = read.csv("Data/MS/L.csv", row.names = 1, check.names=FALSE),
+                   MG = read.csv("Data/MS/MG.csv", row.names = 1, check.names=FALSE))
 
 sigs_cor_5 <- lapply(sigs_cor_5, function(x) {x <- x[,order(colnames(x))];
 colnames(x) <- c("B","Bsp","Dnd","Mcr","Mnc","PMN","NK","T");
@@ -525,9 +528,9 @@ Uniquetest_FalsePositives_bySig_Boxplot <- ggplot(inm_est_FP,
 #the falsely detected cell-type coefficients, we can plot them against the 
 #inter-cell-type profile correlation.
 
-sigs_cor_5 <- list(K = read.csv("Figure_1/Data/MS/K.csv", row.names = 1,
+sigs_cor_5 <- list(K = read.csv("Data/MS/K.csv", row.names = 1,
                                 check.names=FALSE),
-                   MG = read.csv("Figure_1/Data/MS/MG.csv", row.names = 1,
+                   MG = read.csv("Data/MS/MG.csv", row.names = 1,
                                  check.names=FALSE))
 
 sigs_cor_5 <- lapply(sigs_cor_5, function(x) {x <- x[,order(colnames(x))];
