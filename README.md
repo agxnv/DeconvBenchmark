@@ -7,7 +7,7 @@ Performing these evaluations brings a framework for a fair measurement and compa
 
 Step-by-step guide
 ------------------
-For a guided tutorial through the tests proposed in our benchmarking algorithm, see the file "Tutorial.R". 
+For a guided tutorial through the tests proposed in our benchmarking algorithm, see the file ["Tutorial.R"](https://github.com/agxnv/DeconvBenchmark/blob/main/Tutorial.R). 
 
 Datasets
 --------
