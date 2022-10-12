@@ -109,7 +109,6 @@ MG_heatmap <-
 #inter-celltype profile correlation.
 
 sigs_cor_5 <- list(K = read.csv("Data/MS/K.csv", row.names = 1, check.names=FALSE),
-                   L = read.csv("Data/MS/L.csv", row.names = 1, check.names=FALSE),
                    MG = read.csv("Data/MS/MG.csv", row.names = 1, check.names=FALSE))
 
 sigs_cor_5 <- lapply(sigs_cor_5, function(x) {x <- x[,order(colnames(x))];
