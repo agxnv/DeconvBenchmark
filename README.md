@@ -5,8 +5,10 @@ Performing these evaluations brings a framework for a fair measurement and compa
 
 ![1328](https://user-images.githubusercontent.com/68829569/191877734-4a5b1ad9-bc4d-4d3b-8f15-941fa8f8f365.png)
 
-How to run this repo
+How to install and run the examples
 ------------------
+Download the [zip file](http:://oasjdj.org) and unzip in your favorite directory in you local machine.
+
 Clone this repository to your local device: "MyFavoriteDirectory/DeconvBenchmark".  
 For a guided tutorial through the tests proposed in our benchmarking algorithm, load "DeconvBenchmark.Rproj" with RStudio to set your working environment and then run the file ["Tutorial.R"](https://github.com/agxnv/DeconvBenchmark/blob/main/Tutorial.R). 
 
