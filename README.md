@@ -5,13 +5,14 @@ Performing these evaluations brings a framework for a fair measurement and compa
 
 ![1328](https://user-images.githubusercontent.com/68829569/191877734-4a5b1ad9-bc4d-4d3b-8f15-941fa8f8f365.png)
 
-Step-by-step guide
+How to run this repo
 ------------------
-For a guided tutorial through the tests proposed in our benchmarking algorithm, see the file ["Tutorial.R"](https://github.com/agxnv/DeconvBenchmark/blob/main/Tutorial.R). 
+Clone this repository to your local device: "MyFavoriteDirectory/DeconvBenchmark".  
+For a guided tutorial through the tests proposed in our benchmarking algorithm, load "DeconvBenchmark.Rproj" with RStudio to set your working environment and then run the file ["Tutorial.R"](https://github.com/agxnv/DeconvBenchmark/blob/main/Tutorial.R). 
 
 Datasets
 --------
-Our tests requiere certain simulated and semi-simulated samples data to be performed. For our work, we used [murine sc-RNASeq data](https://figshare.com/articles/dataset/MCA_DGE_Data/5435866?file=10756795) from the **Mouse Cell Atlas** (_Han, X. et al. Mapping the Mouse Cell Atlas by Microwell-Seq. Cell, 2018_) to generate semi-simulated pooled samples DGE.
+Our tests requiere certain simulated and semi-simulated samples data to be performed. For our work, we used [murine sc-RNASeq data](https://figshare.com/articles/dataset/MCA_DGE_Data/5435866?file=10756795) from the **Mouse Cell Atlas** (_Han, X. et al. Mapping the Mouse Cell Atlas by Microwell-Seq. Cell, 2018_) to generate semi-simulated pooled samples DGE, wich are agregatted scRNAseq experiments from an unique cell type, simulating a pure bulk sample.
 
 * **Bias test**: The user can generate simulated bulk samples based on any molecular signature to test with the function [SimulatedMixtures](https://rdrr.io/github/elmerfer/MIXTURE/man/SimulatedMixtures.html) from the [MIXTURE](https://github.com/elmerfer/MIXTURE) package.
 * **Null test**: For semi-simulated pooled samples DGE containing parenchymatous and stromal cells from murine tissues, download the file ["simulated_nonimmune.RData"](https://github.com/agxnv/DeconvBenchmark/blob/main/Data/simulated_nonimmune.RData).
