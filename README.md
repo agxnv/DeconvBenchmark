@@ -16,7 +16,7 @@ Our tests requiere certain simulated and semi-simulated samples data to be perfo
 
 * **Bias test**: The user can generate simulated bulk samples based on any molecular signature to test with the function [SimulatedMixtures](https://rdrr.io/github/elmerfer/MIXTURE/man/SimulatedMixtures.html) from the [MIXTURE](https://github.com/elmerfer/MIXTURE) package.
 * **Null test**: For semi-simulated pooled samples DGE containing parenchymatous and stromal cells from murine tissues, download the file ["simulated_nonimmune.RData"](https://github.com/agxnv/DeconvBenchmark/blob/main/Data/simulated_nonimmune.RData).
-* **True positive cases test**: For semi-simulated pooled samples DGE containing just one immune cell-type cells from murine tissues, download the file ["simulated_immune.RData"](https://github.com/agxnv/DeconvBenchmark/blob/main/Data/simulated_immune.RData).
+* **True positive cases test**: For semi-simulated pooled samples DGE containing just one immune cell-type cells per case from murine tissues, download the file ["simulated_immune.RData"](https://github.com/agxnv/DeconvBenchmark/blob/main/Data/simulated_immune.RData).
 
 All the semi-simulated pooled samples were transformed from raw counts to TPM. For calculating the length of each gene, we took the reference genome used to annotate the expression matrices ([Mus musculus GRCm 38.88](https://ftp.ensembl.org/pub/release-88/gtf/mus_musculus/Mus_musculus.GRCm38.88.gtf.gz)), aggregated and averaged the exon’s length for each version of that gene available. See the file ["tpm_calculator.R"](https://github.com/agxnv/DeconvBenchmark/blob/main/Data/tpm_calculator.R).
 
