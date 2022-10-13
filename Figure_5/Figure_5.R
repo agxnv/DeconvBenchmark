@@ -100,7 +100,7 @@ Table1 <- inm_est_melt %>% mutate(result = case_when(ID == variable & beta_hat >
   dplyr::summarize(count=n()) %>% 
   ungroup() %>% 
   complete(result, nesting(Method), fill = list(count = 0)) %>% 
-  dcast(formula = Method~result,fun.aggregate = sum,value.var = "count")
+  dcast(formula = Method~result,value.var = "count")
 
 Table1 <- transform(Table1, Se = TP / (TP + FN))
 Table1 <- transform(Table1, Sp = TN / (TN + FP))

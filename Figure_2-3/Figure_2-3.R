@@ -153,7 +153,7 @@ Sup_Table2 <- rbind(CIBERSORTx_BA,DeconRNASeq_BA,DCQ_BA,EPIC_BA,MIXTURE_BA,quanT
   ungroup() %>% 
   complete(result, nesting(Method,Signature), fill = list(count = 0))
 
-Sup_Table2 <- dcast(data = Sup_Table2,formula = Method + Signature~result,fun.aggregate = sum,value.var = "count")
+Sup_Table2 <- dcast(data = Sup_Table2,formula = Method + Signature~result,value.var = "count")
 
 Sup_Table2 <- Sup_Table2 %>% 
   transform(Se = TP / (TP + FN)) %>% 

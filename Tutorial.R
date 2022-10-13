@@ -259,7 +259,6 @@ BiasTest_table2 <- rbind(EPIC_BA,MIXTURE_BA) %>%
 
 BiasTest_table2 <- dcast(data = BiasTest_table2,
                          formula = Method~result,
-                         fun.aggregate = sum,
                          value.var = "count") %>% 
   transform(Se = TP / (TP + FN)) %>% 
   transform(Sp = TN / (TN + FP)) %>% 
@@ -458,7 +457,7 @@ Uniquetest_Table <- inm_est_melt %>%
   dplyr::summarize(count=n()) %>% 
   ungroup() %>% 
   complete(result, nesting(Method), fill = list(count = 0)) %>% 
-  dcast(formula = Method~result,fun.aggregate = sum,value.var = "count") %>% 
+  dcast(formula = Method~result,value.var = "count") %>% 
   transform(Se = TP / (TP + FN)) %>% 
   transform(Sp = TN / (TN + FP)) %>% 
   transform(PPV = TP / (TP + FP)) %>% 
