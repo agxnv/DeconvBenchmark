@@ -13,7 +13,7 @@ For a guided tutorial through the tests proposed in our benchmarking algorithm, 
 
 Datasets
 --------
-Our tests requiere certain simulated and semi-simulated samples data to be performed. For our work, we used [murine sc-RNASeq data](https://figshare.com/articles/dataset/MCA_DGE_Data/5435866?file=10756795) from the **Mouse Cell Atlas** (_Han, X. et al. Mapping the Mouse Cell Atlas by Microwell-Seq. Cell, 2018_) to generate semi-simulated pooled samples DGE, wich are agregatted scRNAseq experiments from an unique cell type, simulating a pure bulk sample.
+Our tests requiere certain simulated and semi-simulated samples data to be performed. For our work, we used [murine sc-RNASeq data](https://figshare.com/articles/dataset/MCA_DGE_Data/5435866?file=10756795) from the **Mouse Cell Atlas** (_Han, X. et al. Mapping the Mouse Cell Atlas by Microwell-Seq. Cell, 2018_) to generate semi-simulated pooled samples DGE, wich are agregatted scRNAseq experiments from each cell type separated, simulating a pure bulk sample.
 
 * **Bias test**: The user can generate simulated bulk samples based on any molecular signature to test with the function [SimulatedMixtures](https://rdrr.io/github/elmerfer/MIXTURE/man/SimulatedMixtures.html) from the [MIXTURE](https://github.com/elmerfer/MIXTURE) package.
 * **Null test**: For semi-simulated pooled samples DGE containing parenchymatous and stromal cells from murine tissues, download the file ["simulated_nonimmune.RData"](https://github.com/agxnv/DeconvBenchmark/blob/main/Data/simulated_nonimmune.RData).
