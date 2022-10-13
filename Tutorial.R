@@ -14,14 +14,13 @@
 
 #Step 0: Load the DMs packages and the molecular signatures
 
-library(ADAPTS)
-library(WGCNA)
-library(DeconRNASeq)
+library(EPIC)
+library(MIXTURE)
+
 library(reshape2)
 library(tidyverse)
+library(ggpubr)
 library(scales)
-library(MIXTURE)
-library(immunedeconv)
 library(readr)
 library(ComplexHeatmap)
 library(circlize)
@@ -36,14 +35,14 @@ sigs <- list(K = read.csv("Data/MS/K.csv", row.names = 1, check.names=FALSE),
 #type in the MS. 
 
 
-EPIC_selftest_list <- mapply(FUN = EPIC, 
+EPIC_st_list <- mapply(FUN = EPIC, 
                              bulk = sigs, 
                              reference = lapply(sigs, function(x)
                              list(refProfiles = x, sigGenes = rownames(x))),
                              withOtherCells = FALSE, 
                              SIMPLIFY=FALSE)
 
-MIXTURE_selftest_list <- mapply(FUN = MIXTURE, 
+MIXTURE_st_list <- mapply(FUN = MIXTURE, 
                                 expressionMatrix = sigs,
                                 signatureMatrix = sigs, 
                                 SIMPLIFY=FALSE)
@@ -51,54 +50,60 @@ MIXTURE_selftest_list <- mapply(FUN = MIXTURE,
 #After running the deconvolutions, a heatmap with the results can be 
 #generated to compare them easily.
 
-EPIC_selftest_list <- lapply(EPIC_selftest_list, function(x) 
-  as.data.frame(x$cellFractions) %>% 
-  mutate(X1 = rownames(x)) %>% 
-  arrange(X1) %>%
-  na_if(0)) 
+EPIC_st_list <- lapply(EPIC_st_list, function(x) x$cellFractions)
 
-EPIC_selftest_list <- lapply(EPIC_selftest_list, function(x) 
-  data.matrix(x[,!(colnames(x) == "X1")]
-              [,order(colnames(x[,!(colnames(x) == "X1")]))]))
-
-colnames(EPIC_selftest_list$MG) <- 
-  rownames(EPIC_selftest_list$MG) <- 
-  c("B","Bsp","Dnd","Mcr","Mnc","PMN","NK","T")
-
-colnames(EPIC_selftest_list$K) <- 
-  rownames(EPIC_selftest_list$K) <-
-  c("B","Bsp","Dnd","Mcr","Mnc","PMN","NK","T")
-
-
-MIXTURE_selftest_list <- lapply(MIXTURE_selftest_list, function(x) 
-  as.data.frame(x$Subjects$MIXprop) %>% 
+EPIC_st_list <- lapply(EPIC_st_list, function(x) as.data.frame(x) %>% 
                       mutate(X1 = rownames(x)) %>% 
                       arrange(X1) %>% na_if(0)) 
 
-MIXTURE_selftest_list <- lapply(MIXTURE_selftest_list, function(x)
-  data.matrix(x[,!(colnames(x) == "X1")][,order(
-    colnames(x[,!(colnames(x) == "X1")]))]))
+EPIC_st_list <- lapply(EPIC_st_list, function(x) data.matrix(x[,!(colnames(x) == "X1")][,order(colnames(x[,!(colnames(x) == "X1")]))]))
 
-colnames(MIXTURE_selftest_list$MG) <-
-  rownames(MIXTURE_selftest_list$MG) <-
-  cell.types.names.MG
+colnames(EPIC_st_list$MG) <- 
+  rownames(EPIC_st_list$MG) <- 
+  c("B","Bsp","Dnd","Mcr","Mnc","PMN","NK","T")
 
-colnames(MIXTURE_selftest_list$K) <-
-  rownames(MIXTURE_selftest_list$K) <-
-  cell.types.names.k.l.mg
+colnames(EPIC_st_list$K) <- 
+  rownames(EPIC_st_list$K) <-
+  c("B","Bsp","Dnd","Mcr","Mnc","PMN","NK","T")
 
 
-library(ComplexHeatmap)
-library(circlize)
+MIXTURE_st_list <- lapply(MIXTURE_st_list, function(x) x$Subjects$MIXprop)
+
+MIXTURE_st_list <- lapply(MIXTURE_st_list, function(x) as.data.frame(x) %>% 
+                         mutate(X1 = rownames(x)) %>% 
+                         arrange(X1) %>% na_if(0)) 
+
+MIXTURE_st_list <- lapply(MIXTURE_st_list, function(x) data.matrix(x[,!(colnames(x) == "X1")][,order(colnames(x[,!(colnames(x) == "X1")]))]))
+
+colnames(MIXTURE_st_list$MG) <-
+  rownames(MIXTURE_st_list$MG) <-
+  c("B","Bsp","Dnd","Mcr","Mnc","PMN","NK","T")
+
+colnames(MIXTURE_st_list$K) <-
+  rownames(MIXTURE_st_list$K) <-
+  c("B","Bsp","Dnd","Mcr","Mnc","PMN","NK","T")
+
+K_heatmap <- 
+  Heatmap(EPIC_st_list$K, cluster_rows = FALSE,
+          column_title_gp = gpar(fontsize=15), show_column_names = TRUE,
+          show_row_names = FALSE, row_title = "Kidney",cluster_columns = FALSE,
+          column_title = "EPIC",name = "Kidney",
+          col = colorRamp2(c(0, 1), c("blue",  "red")),
+          show_heatmap_legend = F) +
+  Heatmap(MIXTURE_st_list$K, cluster_rows = FALSE,
+          column_title_gp = gpar(fontsize=15), show_row_names = FALSE,
+          cluster_columns = FALSE, column_title = "MIXTURE", name = "MIXTURE",
+          col = colorRamp2(c(0, 1), c("blue",  "red")),
+          show_heatmap_legend = FALSE, show_column_names = TRUE) 
 
 MG_heatmap <- 
-  Heatmap(EPIC_selftest_list$MG, cluster_rows = FALSE,
+  Heatmap(EPIC_st_list$MG, cluster_rows = FALSE,
           column_title_gp = gpar(fontsize=15), show_column_names = TRUE,
-          show_row_names = FALSE, cluster_columns = FALSE,
+          show_row_names = FALSE, row_title = "Mammary gland",cluster_columns = FALSE,
           column_title = "EPIC",name = "Mammary gland",
           col = colorRamp2(c(0, 1), c("blue",  "red")),
           show_heatmap_legend = F) +
-  Heatmap(MIXTURE_selftest_list$MG, cluster_rows = FALSE,
+  Heatmap(MIXTURE_st_list$MG, cluster_rows = FALSE,
           column_title_gp = gpar(fontsize=15), show_row_names = FALSE,
           cluster_columns = FALSE, column_title = "MIXTURE", name = "MIXTURE",
           col = colorRamp2(c(0, 1), c("blue",  "red")),
@@ -125,10 +130,10 @@ MG_melted_table <- melt(sigs_cor_5$MG, na.rm = TRUE, value.name = "cor")
 MG_melted_table$Signature <- "MG"
 
 cortotal <- rbind(K_melted_table,MG_melted_table) %>% arrange(Signature)
-cortotal[166:330,] <- cortotal[,c(2,1,3,4)]
+cortotal[57:112,] <- cortotal[,c(2,1,3,4)]
 
 
-EPIC_selftest_list_supfig1 <- lapply(EPIC_selftest_list, function(x) melt(x))
+EPIC_selftest_list_supfig1 <- lapply(EPIC_st_list, function(x) melt(x))
 EPIC_selftest_list_supfig1 <-  EPIC_selftest_list_supfig1 %>% bind_rows(.id = "Signature")
 EPIC_selftest_list_supfig1 <- EPIC_selftest_list_supfig1[EPIC_selftest_list_supfig1$Var1 != EPIC_selftest_list_supfig1$Var2,]
 EPIC_selftest_list_supfig1 <- EPIC_selftest_list_supfig1[complete.cases(EPIC_selftest_list_supfig1),]
@@ -406,7 +411,7 @@ Nulltest_boxplot <- ggboxplot(NCT_null_test, x = "Method",
 
 #Step 1: Load the samples
 
-load("Figure_5/Data/simulated_immune.RData")
+load("Data/simulated_immune.RData")
 
 inm_test <- list(K = k_counts_inm_tpm,
                  MG = mg_counts_inm_tpm)
@@ -497,7 +502,7 @@ Uniquetest_TruePositives_bySig_Boxplot <- ggplot(inm_est_TP,
        y = "Predicted percentages for TP") +
   facet_wrap(~Method) + scale_y_continuous(labels = scales::percent)
 
-inm_est_FP <- inm_est_melt %>% filter(ID != variable, betahat > 0)
+inm_est_FP <- inm_est_melt %>% filter(as.character(ID) != as.character(variable), betahat > 0)
 
 n1 <- inm_est_FP %>% 
   group_by(Method) %>% 
@@ -557,7 +562,7 @@ inm_est_FP <- left_join(inm_est_FP,
                         cortotal,
                         by = c("names","Signature"))
 
-cor_FP_analysis <- ggplot(inm_est_FP, aes(x=cor, y=beta_hat)) +
+cor_FP_analysis <- ggplot(inm_est_FP, aes(x=cor, y=betahat)) +
   geom_point() +
   facet_grid(~Method) +
   xlab("Correlation between the deconvolved cell type and the detected cell
