@@ -38,6 +38,12 @@ We tested six reference-based methods made to deconvolve bulk RNA-Seq samples.
 | **MIXTURE** | R package: [MIXTURE v0.0.1](https://github.com/elmerfer/MIXTURE) | Fernández EA, Mahmoud YD, Veigas F et al. Unveiling the immune infiltrate modulation in cancer and response to immunotherapy by MIXTURE-an enhanced deconvolution method. Brief Bioinform, 20;22(4), 2021 |
 | **quanTIseq** | R package: [immunedeconv v2.0.4](https://link.springer.com/protocol/10.1007/978-1-0716-0327-7_16) | Finotello F, Mayer C, Plattner C, Laschober G, Rieder D, Hackl H, Krogsdam A, Loncova Z, Posch W, Wilflingseder D, Sopper S, Ijsselsteijn M, Brouwer TP, Johnson D, Xu Y, Wang Y, Sanders ME, Estrada MV, Ericsson-Gonzalez P, Charoentong P, Balko J, de Miranda NFDCC, Trajanoski Z. Molecular and pharmacological modulators of the tumor immune contexture revealed by deconvolution of RNA-seq data. Genome Medicine, 2019 |
 
+Citation
+-------
+Agustín Nava, Daniela Alves da Quinta, Laura Prato, María Romina Girotti, Gabriel Moron, Andrea S. Llera, Elmer A. Fernández,
+_Novel evaluation approach for molecular signature-based deconvolution methods_,
+Journal of Biomedical Informatics, 2023. DOI: [https://doi.org/10.1016/j.jbi.2023.104387](https://doi.org/10.1016/j.jbi.2023.104387). 
+
 Authors
 -------
 * **Elmer A. Fernández** - *Idea* - [Profile](https://www.researchgate.net/profile/Elmer_Fernandez) - [CIDIE]- [CONICET]
